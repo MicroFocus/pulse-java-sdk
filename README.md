@@ -2,19 +2,21 @@
 
 ## License
 
-MIT License
-
-Copyright (c) 2019 Micro Focus or one of its affiliates.
-
-Licensed under the MIT License (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-https://opensource.org/licenses/MIT
-
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
-on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and limitations under the License.
+> **MIT License**
+>
+> Copyright &copy; 2019 Micro Focus or one of its affiliates.
+>
+> Licensed under the MIT License (the &ldquo;License&rdquo;); you may not use this file
+> except in compliance with the License. You may obtain a copy of the License
+> at
+>
+> [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
+>
+> Unless required by applicable law or agreed to in writing, software
+> distributed under the License is distributed on an &ldquo;AS IS&rdquo; BASIS, WITHOUT
+> WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+> License for the specific language governing permissions and limitations
+> under the License.
 
 ## Introduction
 
@@ -22,12 +24,12 @@ Micro Focus Pulse's Plugin Development Kit provides an easy way to integrate fun
 
 The SDK is broken down into 5 modules with a parent SDK module tying everything together:
 
-1. **pulse-plugin-core**: provides a number of interfaces that form the base for all plugins.
-2. **pulse-plugin-chain-api**: interfaces that allow chain plugins to be written, including chain step and chain finding plugins. You can
+1. [pulse-plugin-core-api](https://microfocus.github.io/pulse-java-sdk/apidocs/pulse-plugin-core-api/index.html): provides a number of interfaces that form the base for all plugins.
+2. [pulse-plugin-chain-api](https://microfocus.github.io/pulse-java-sdk/apidocs/pulse-plugin-chain-api/index.html): interfaces that allow chain plugins to be written, including chain step and chain finding plugins. You can
 use these to tightly integrate external tools such as build or static analysis into your chains.
-3. **pulse-plugin-chain-dto**: definition of all the DTO objects used by the pulse-plugin-chain-api
-4. **pulse-plugin-event-api**: interfaces that allow plugins to be written that will be called when an internal event happens, such as a review changes state or a comment is made on a review.
-5. **pulse-plugin-event-dto**: definition of all the DTO objects used by the pulse-plugin-event-api
+3. [pulse-plugin-chain-dto](https://microfocus.github.io/pulse-java-sdk/apidocs/pulse-plugin-chain-dto/index.html): definition of all the DTO objects used by the pulse-plugin-chain-api
+4. [pulse-plugin-event-api](https://microfocus.github.io/pulse-java-sdk/apidocs/pulse-plugin-event-api/index.html): interfaces that allow plugins to be written that will be called when an internal event happens, such as a review changes state or a comment is made on a review.
+5. [pulse-plugin-event-dto](https://microfocus.github.io/pulse-java-sdk/apidocs/pulse-plugin-event-dto/index.html): definition of all the DTO objects used by the pulse-plugin-event-api
 
 ## Usage Examples
 
