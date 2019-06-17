@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2019 Micro Focus or one of its affiliates.
+
+    Licensed under the MIT License (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    https://opensource.org/licenses/MIT
+
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+    on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and limitations under the License.
+-->
+
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.microfocus.adm.pulse</groupId>
+    <artifactId>pulse-java-sdk</artifactId>
+    <packaging>pom</packaging>
+    <version>19.1.1-SNAPSHOT</version>
+    <name>Micro Focus Pulse: Java SDK</name>
+    <url>https://github.com/MicroFocus/pulse-java-sdk</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://github.com/MicroFocus/pulse-java-sdk/blob/master/LICENSE</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>dconneely</id>
+            <name>David Conneely</name>
+            <email>david.conneely@microfocus.com</email>
+            <roles>
+                <role>Global owner and maintainer</role>
+            </roles>
+            <organization>MicroFocus</organization>
+        </developer>
+        <developer>
+            <id>balharrie</id>
+            <name>Neil Balharrie</name>
+            <email>neil.balharrie@microfocus.com</email>
+            <organization>MicroFocus</organization>
+        </developer>
+    </developers>
+
+    <modules>
+        <module>pulse-plugin-core-api</module>
+        <module>pulse-plugin-chain-api</module>
+        <module>pulse-plugin-chain-dto</module>
+        <module>pulse-plugin-event-api</module>
+        <module>pulse-plugin-event-dto</module>
+        <module>pulse-plugin-examples/pulse-plugin-event-statelogger</module>
+        <module>pulse-plugin-examples/pulse-plugin-chainstep-worddetector</module>
+    </modules>
+
+    <properties>
+        <!-- Default version -->
+        <java-version>1.8</java-version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+
+        <!-- Pulse customer-visible display name and version. -->
+        <com.serena.starlight-marketing.name>Micro Focus Pulse</com.serena.starlight-marketing.name>
+        <com.serena.starlight-marketing.version>19.1.1</com.serena.starlight-marketing.version>
+
+        <!-- Maven bug: you must "expose" the ${maven.build.timestamp} as another property or won't work in some places. -->
+        <build.timestamp>${maven.build.timestamp}</build.timestamp>
+        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+
+        <!-- Avoid source encoding warnings. -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
+
+    <profiles>
+        <!-- Default values for build environment variables. -->
+        <profile>
+            <id>fallbackproperty.dimensions.build.number</id>
+            <activation><property><name>!dimensions.build.number</name></property></activation>
+            <properties><dimensions.build.number>1.0</dimensions.build.number></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.dimensions.hotfix.number</id>
+            <activation><property><name>!dimensions.hotfix.number</name></property></activation>
+            <properties><dimensions.hotfix.number>0</dimensions.hotfix.number></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.JOB_NAME</id>
+            <activation><property><name>!env.JOB_NAME</name></property></activation>
+            <properties><env.JOB_NAME>HADAR</env.JOB_NAME></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.BUILD_NUMBER</id>
+            <activation><property><name>!env.BUILD_NUMBER</name></property></activation>
+            <properties><env.BUILD_NUMBER>0</env.BUILD_NUMBER></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.BUILD_TAG</id>
+            <activation><property><name>!env.BUILD_TAG</name></property></activation>
+            <properties><env.BUILD_TAG>developer-${env.JOB_NAME}-${env.BUILD_NUMBER}</env.BUILD_TAG></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.BUILD_ID</id>
+            <activation><property><name>!env.BUILD_ID</name></property></activation>
+            <properties><env.BUILD_ID>YYYY-MM-DD_hh-mm-ss</env.BUILD_ID></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.repo</id>
+            <activation><property><name>!env.repo</name></property></activation>
+            <properties><env.repo>developer</env.repo></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.changeset</id>
+            <activation><property><name>!env.changeset</name></property></activation>
+            <properties><env.changeset>0</env.changeset></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.stream</id>
+            <activation><property><name>!env.stream</name></property></activation>
+            <properties><env.stream>HADAR</env.stream></properties>
+        </profile>
+        <profile>
+            <id>fallbackproperty.env.version</id>
+            <activation><property><name>!env.version</name></property></activation>
+            <properties><env.version>0</env.version></properties>
+        </profile>
+    </profiles>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Ensure defined versions of all Core plugins for repeatable build. -->
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <showDeprecation>true</showDeprecation>
+                        <showWarnings>true</showWarnings>
+                        <compilerArgs combine.children="append">
+                            <!--
+                            Enable all Javac warnings except bootclasspath options (since we are using Animal Sniffer instead),
+                            unclaimed annotations processing (redundant) and missing serialVersionUID definitions (don't care).
+                            -->
+                            <arg>-Xlint:all,-options,-processing,-serial</arg>
+                        </compilerArgs>
+                        <source>${java-version}</source>
+                        <target>${java-version}</target>
+                    </configuration>
+                </plugin>
+
+                <!-- Ensure defined versions of Packaging type plugins for repeatable build. -->
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>test-jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <Build-Timestamp>${build.timestamp}</Build-Timestamp>
+                                <Build-Version-CI>${project.artifactId}-${project.version}; BUILD_ID=${env.BUILD_ID}; BUILD_NUMBER=${env.BUILD_NUMBER}; BUILD_TAG=${env.BUILD_TAG}</Build-Version-CI>
+                                <Build-Version-Pulse>${project.artifactId}-${project.version}; repo=${env.repo}; changeset=${env.changeset}; stream=${env.stream}; version=${env.version}</Build-Version-Pulse>
+                                <Build-Version-External>${dimensions.build.number}#${dimensions.hotfix.number}</Build-Version-External>
+                                <Specification-Title>${com.serena.starlight-marketing.name}</Specification-Title>
+                                <Specification-Version>${com.serena.starlight-marketing.version}</Specification-Version>
+                            </manifestEntries>
+                        </archive>
+                        <!-- Don't want Dimensions CM metadata in JAR. -->
+                        <excludes>
+                            <exclude>**/.dm</exclude>
+                            <exclude>**/.dm/**</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+            <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                            <configuration>
+                                <archive>
+                                    <addMavenDescriptor>false</addMavenDescriptor>
+                                    <manifest>
+                                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                    </manifest>
+                                    <manifestEntries>
+                                        <Build-Timestamp>${build.timestamp}</Build-Timestamp>
+                                        <Build-Version-CI>${project.artifactId}-${project.version}; BUILD_ID=${env.BUILD_ID}; BUILD_NUMBER=${env.BUILD_NUMBER}; BUILD_TAG=${env.BUILD_TAG}</Build-Version-CI>
+                                        <Build-Version-Pulse>${project.artifactId}-${project.version}; repo=${env.repo}; changeset=${env.changeset}; stream=${env.stream}; version=${env.version}</Build-Version-Pulse>
+                                        <Build-Version-External>${dimensions.build.number}#${dimensions.hotfix.number}</Build-Version-External>
+                                        <Specification-Title>${com.serena.starlight-marketing.name}</Specification-Title>
+                                        <Specification-Version>${com.serena.starlight-marketing.version}</Specification-Version>
+                                    </manifestEntries>
+                                </archive>
+                                <!-- Don't want Dimensions CM metadata in source JARs. -->
+                                <excludes>
+                                    <exclude>**/.dm</exclude>
+                                    <exclude>**/.dm/**</exclude>
+                                </excludes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${maven-javadoc-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <archive>
+                                    <addMavenDescriptor>false</addMavenDescriptor>
+                                    <manifest>
+                                        <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                    </manifest>
+                                    <manifestEntries>
+                                        <Build-Timestamp>${build.timestamp}</Build-Timestamp>
+                                        <Build-Version-CI>${project.artifactId}-${project.version}; BUILD_ID=${env.BUILD_ID}; BUILD_NUMBER=${env.BUILD_NUMBER}; BUILD_TAG=${env.BUILD_TAG}</Build-Version-CI>
+                                        <Build-Version-Pulse>${project.artifactId}-${project.version}; repo=${env.repo}; changeset=${env.changeset}; stream=${env.stream}; version=${env.version}</Build-Version-Pulse>
+                                        <Build-Version-External>${dimensions.build.number}#${dimensions.hotfix.number}</Build-Version-External>
+                                        <Specification-Title>${com.serena.starlight-marketing.name}</Specification-Title>
+                                        <Specification-Version>${com.serena.starlight-marketing.version}</Specification-Version>
+                                    </manifestEntries>
+                                </archive>
+                                <!-- Don't want Dimensions CM metadata in javadoc JAR. -->
+                                <excludedocfilessubdir>.dm</excludedocfilessubdir>
+                                <quiet>true</quiet>
+                                <doclint>none</doclint>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>2.15</version>
+                    <executions>
+                        <execution>
+                            <id>verify-style</id>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <configLocation>${project.basedir}/../config/checkstyle-rules.xml</configLocation>
+                                <consoleOutput>true</consoleOutput>
+                                <failOnViolation>true</failOnViolation>
+                                <includeTestSourceDirectory>false</includeTestSourceDirectory>
+                                <logViolationsToConsole>true</logViolationsToConsole>
+                                <!-- Don't check generated code. -->
+                                <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+                                <testSourceDirectory>${project.build.testSourceDirectory}</testSourceDirectory>
+                                <violationSeverity>error</violationSeverity>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

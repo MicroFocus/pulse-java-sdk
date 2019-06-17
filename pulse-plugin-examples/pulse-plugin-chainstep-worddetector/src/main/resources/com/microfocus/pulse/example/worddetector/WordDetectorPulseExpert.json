@@ -1,0 +1,20 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "words": {
+        "type": "string",
+        "title": "Words"
+      }
+    },
+    "required": [
+      "words"
+    ]
+  },
+  "form": [
+    {
+      "key": "words",
+      "placeholder": "Comma separated list of words to be searched for in the source code"
+    }
+  ]
+}

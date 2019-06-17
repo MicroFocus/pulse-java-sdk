@@ -1,0 +1,62 @@
+{
+  "identifier": "6386079",
+  "chain": {
+    "id": "6385639",
+    "version": 2,
+    "title": "Example chain",
+    "matchingPaths": "",
+    "capabilities": "",
+    "scanPaths": "",
+    "fetchStream": false,
+    "steps": [
+      {
+        "title": "Word detector",
+        "name": "Word detector",
+        "key": "6385640",
+        "id": "com.microfocus.pulse.example:worddetector",
+        "chainOrder": "1",
+        "properties": {
+          "words": "hello, world"
+        }
+      }
+    ]
+  },
+  "fetch": {
+    "streamId": "33921",
+    "streamName": "CM_TAWNY",
+    "changeset": "94921"
+  },
+  "scm" : {
+    "title" : "CM Test Server",
+    "scmUrl" : "scm:dimensions://test-vv/cm@DM",
+    "username" : "test",
+    "password" : "none",
+    "authenticationType" : "CREDENTIALS",
+    "scmUri" : "scm:dimensions:id:cm@DM"
+  },
+  "changesets": {
+    "streamTitle": "DMPROD:CM_TAWNY",
+    "productTitle": "DMPROD",
+    "suiteTitle": "Micro Focus Products",
+    "scmConnectionUri": "scm:dimensions:id:CMPROD@ORD-DM-DMPROD",
+    "changes": [
+      {
+        "date": 1510712179000,
+        "message": "INT310100: [Pulse] Simplify ChangePackageValidating#validate signature ",
+        "loginName": "NBALHARRIE",
+        "id": "94921",
+        "streamVersionId": "DMPROD:CM_TAWNY;5799",
+        "changes": [
+          {
+            "identifier": "DMPROD:DELIVERYPUBLISHERIMPL JAVA-234535183X6948X20.A-SRC;cm_tawny#20",
+            "revision": "cm_tawny#20",
+            "change": "MODIFIED",
+            "directory": false,
+            "before": "java_build/starlight/changeset-services/src/main/java/com/serena/starlight/changesetservice/publisher/ChangeSetPublisherImpl.java",
+            "after": "java_build/starlight/changeset-services/src/main/java/com/serena/starlight/changesetservice/publisher/ChangeSetPublisherImpl.java"
+          }
+        ]
+      }
+    ]
+  }
+}

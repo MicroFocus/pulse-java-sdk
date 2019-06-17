@@ -1,0 +1,2 @@
+# Demo of a plugin for receiving review status event
+com.microfocus.adm.pulse.plugin.example.statelogger.StateLoggerExample;

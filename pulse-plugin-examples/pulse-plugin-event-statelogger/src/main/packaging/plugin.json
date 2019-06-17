@@ -1,0 +1,13 @@
+{
+  "name": "${project.artifactId}",
+  "version": "${project.version}",
+  "requires": {
+    "java": "${java.version}",
+    "plugin-api": "${pulse.plugin.api.version.required}"
+  },
+  "experts": [
+    {
+      "className": "com.microfocus.adm.pulse.plugin.example.statelogger.StateLoggerExample"
+    }
+  ]
+}

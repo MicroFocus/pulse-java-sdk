@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2019 Micro Focus or one of its affiliates.
+
+    Licensed under the MIT License (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    https://opensource.org/licenses/MIT
+
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+    on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.microfocus.adm.pulse</groupId>
+        <artifactId>pulse-java-sdk</artifactId>
+        <version>19.1.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>com.microfocus.pulse</groupId>
+    <artifactId>pulse-plugin-chainstep-worddetector</artifactId>
+    <name>Chain Step Plugin Example: "Word detector"</name>
+    <version>19.1.1-SNAPSHOT</version>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <pulse.plugin.api.version>19.1.1-SNAPSHOT</pulse.plugin.api.version>
+        <pulse.plugin.api.version.required>14.5</pulse.plugin.api.version.required>
+    </properties>
+
+    <!--
+        If you add dependencies that this plugin relies on, then uncomment the "mappedresource"
+        section in the "maven-antrun-plugin" section below, otherwise the plugin spar will
+        be missing the libraries it needs to run.
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>com.microfocus.adm.pulse</groupId>
+            <artifactId>pulse-plugin-chain-api</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Build the plugin Java code into a jar. -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Build-Timestamp>${build.timestamp}</Build-Timestamp>
+                            <Build-Version>${project.artifactId}-${project.version}</Build-Version>
+                        </manifestEntries>
+                    </archive>
+                    <!-- Don't want Dimensions CM metadata in JAR. -->
+                    <excludes>
+                        <exclude>**/.dm</exclude>
+                        <exclude>**/.dm/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!-- Package the jar and its dependencies into plugin SPAR file that is installed into Pulse. -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <id>make-spar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <dependencyfilesets scopes="compile,runtime" types="jar"/>
+                                <property name="plugin.file"
+                                          location="${project.build.directory}/${project.artifactId}.spar"/>
+                                <property name="descriptor.file" location="${project.build.directory}/plugin.json"/>
+                                <!-- Generate the plugin descriptor JSON content by expanding properties. -->
+                                <loadfile srcfile="${project.basedir}/src/main/packaging/plugin.json"
+                                          property="descriptor.content">
+                                    <filterchain>
+                                        <expandproperties/>
+                                    </filterchain>
+                                </loadfile>
+                                <echo message="${descriptor.content}" file="${descriptor.file}"/>
+                                <!-- Assemble ".spar" file contents. -->
+                                <zip destfile="${plugin.file}">
+                                    <fileset file="${descriptor.file}"/>
+                                    <fileset dir="${project.basedir}" includes="LICENSE*,NOTICE*,README*"/>
+                                    <fileset file="${project.build.directory}/${project.build.finalName}.jar"/>
+                                    <!--
+                                        Uncomment the following section if your plugin relies on other libraries.
+                                    -->
+                                    <!--<mappedresources>-->
+                                    <!--<fileset refid="maven.project.dependencies"/>-->
+                                    <!--<flattenmapper/>-->
+                                    <!--</mappedresources>-->
+                                </zip>
+                                <attachartifact file="${plugin.file}" type="spar"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- REMOVEABLE - THIS IS HERE TO HELP THE PULSE TEAM GENERATE A ZIP OF THE PLUGIN TO GIVE TO OTHER TEAMS -->
+            <!-- Generates a zip of the demo plugin that can be given to 3rd parties. You should remove this from your plugins pom.xml -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>pulse-source-${project.build.finalName}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/main/packaging/dist.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
